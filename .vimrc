@@ -70,7 +70,7 @@ set is
 if has('gui_running')
     set background=dark
     colorscheme slate
-    set guifont=JetBrains\ Mono\Monospace\ 12
+    set guifont=JetBrains\ Mono\ 12
 endif
 
 " Source a global configuration file if available
