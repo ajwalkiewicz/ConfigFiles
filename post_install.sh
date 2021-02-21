@@ -127,8 +127,8 @@ echo "permit nopass $USER as root" >> /usr/local/etc/doas.conf
 
 # My reposotory
 print_message "Cloning: My repository"
-# git clone 
-# mv etc.
+mkdir ~/Git
+git clone https://github.com/ajwalkiewicz/MyConfigFiles.git ~/Git/
 
 print_message "Done"
 
@@ -146,6 +146,9 @@ echo "############################################"
 xdg-mime default nemo.desktop inode/directory application/x-gnome-saved-search
 
 # Creating my bash settings
+cp .bashrc .bashrc.bak
+cp ~/Git/.bashrc .
+
 
 # Setting tilix as default terminal
 # sudo update-alternatives --config x-terminal-emulator
