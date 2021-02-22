@@ -42,12 +42,15 @@ sudo apt install snapd gnome-tweak-tool flatpak -y
 sudo apt install discord chromium-browser -y
 # Tools
 sudo apt install tilix htop fdupes nemo gnome-tweaks \
-neofetch nmap meld synaptic tree unrar flameshot \
+neofetch nmap meld synaptic tree pv unrar flameshot \
 minicom git -y
 # Programming 
 sudo apt install python3-pip python3-venv -y
 # Work
-sudo apt install peek nomachine slack-desktop sshpass zoom -y
+sudo apt install peek slack-desktop sshpass \
+tftpd-hpa tftp-hpa nfs-kernel-server nfs-common -y
+# Others
+
  
 print_message "Done"
 
@@ -65,8 +68,8 @@ echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sou
 sudo apt-get update
 sudo apt-get install sublime-text
 
-install_message "Dropbox"
-cd ~ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
+# install_message "Dropbox"
+# cd ~ && wget -O - "https://www.dropbox.com/download?plat=lnx.x86_64" | tar xzf -
 
 install_message "Arduino-cli"
 
@@ -75,7 +78,7 @@ curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.
 print_message "Done"
 
 echo "############################################"
-echo "# Flatpak apps                          #"
+echo "# Flatpak apps                             #"
 echo "############################################"
 
 install_message "Skype"
@@ -112,23 +115,15 @@ print_message "Cloning: fuzzy finder"
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
 
-# Installing Oh My Bash
-print_message "Cloning: Oh My Bash"
-sh -c "$(wget https://raw.githubusercontent.com/ohmybash/oh-my-bash/master/tools/install.sh -O -)"
-# Downloading my repo with scripts
-
 # doas
 print_message "Cloning: doas"
-git clone https://github.com/slicer69/doas.git
-cd doas
-sudo make install
-sudo /usr/local/etc/
-echo "permit nopass $USER as root" >> /usr/local/etc/doas.conf
-
-# My reposotory
-print_message "Cloning: My repository"
 mkdir ~/Git
-git clone https://github.com/ajwalkiewicz/MyConfigFiles.git ~/Git/
+git clone https://github.com/slicer69/doas.git Git/doas
+cd ~/Git/doas
+sudo make install
+sudo mkdir /usr/local/etc/
+echo "permit nopass $USER as root" > /usr/local/etc/doas.conf
+cd ~/
 
 print_message "Done"
 
@@ -145,20 +140,22 @@ echo "############################################"
 # Setting nemo as default file manager
 xdg-mime default nemo.desktop inode/directory application/x-gnome-saved-search
 
-# Creating my bash settings
-cp .bashrc .bashrc.bak
-cp ~/Git/.bashrc .
-
+# Setting aliases
+echo "# My aliases" >> ~/.bashrc
+echo "alias sudo='doas --'" >> ~/.bashrc
 
 # Setting tilix as default terminal
 # sudo update-alternatives --config x-terminal-emulator
 # chose number
 
-# Setting flameshot
-# Set night mode
+# Setting flameshot /usr/bin/flameshot gui
 # Set gnome tweaks
-# set configs from my github
-
+# - hoover
+# Set configs from my github
+# Dropbox
+# Oh my bash
+# Settings:
+# pl keyboard, 24h time, night mode
 
 echo "############################################"
 echo "# Done.                                    #"
