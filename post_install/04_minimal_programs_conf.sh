@@ -11,4 +11,4 @@ sudo apt install synaptic flameshot tree pv untar nmap -y
 git clone https://github.com/dylanaraps/pfetch.git ~/Git/pfetch
 echo "alias pfetch='~/Git/pfetch/pfetch'" >> ~/.zshrc
 
-sudo apt install ranger -y
+doas -- apt install ranger -y

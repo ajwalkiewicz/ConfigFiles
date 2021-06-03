@@ -6,3 +6,7 @@ mkdir Pictures/wallpapers
 
 # Setting i3 configuration files
 
+# Rofi
+mkdir -p ~/.config/rofi
+rofi -dump-config > ~/.config/rofi/config.rasi
+
