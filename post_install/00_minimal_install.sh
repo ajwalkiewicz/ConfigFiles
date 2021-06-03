@@ -73,24 +73,36 @@ apt install gnupg i3 xorg suckless-tools lightdm nitrogen compton tilix xsel rof
 apt install build-essential make bison flex libpam0g-dev -y   
 
 # Standard application
-apt install synaptic tree pv unrar flameshot python3-pip python3-venv 
+apt install python3-pip python3-venv vim -y
 
 # Installing iwd - replacement for network manager
-apt install iwd
+apt install iwd -y
 systemctl enable iwd.service
 systemctl start iwd.service
 
+# Battery
+apt install s-tui stress i7z
+
+
+# Graphics
+
+# Audio
+apt install pulseaudio
+
 # Installing doas - replacement for sudo
+cd
 mkdir ~/Git
-git clone https://github.com/slicer69/doas.git Git/doas
+git clone https://github.com/slicer69/doas.git ~/Git/doas
 cd ~/Git/doas
 sudo make install
 sudo mkdir /usr/local/etc/
 echo "permit nopass $NRUSER as root" > /usr/local/etc/doas.conf
 cd ~/
 
+# Setting alias for sudo 
 echo "alias sudo='doas --'" >> /home/$NRUSER/.bashrc
 
+# My config files gitgub in home directory
 mkdir /home/$NRUSER/Git
 git clone https://github.com/ajwalkiewicz/config-files.git /home/$NRUSER/Git/config-files
 chown -R $NRUSER:$NRUSER /home/$NRUSER/Git
