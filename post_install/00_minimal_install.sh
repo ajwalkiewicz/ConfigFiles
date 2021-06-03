@@ -94,8 +94,8 @@ cd
 mkdir ~/Git
 git clone https://github.com/slicer69/doas.git ~/Git/doas
 cd ~/Git/doas
-sudo make install
-sudo mkdir /usr/local/etc/
+make install
+mkdir /usr/local/etc/
 echo "permit nopass $NRUSER as root" > /usr/local/etc/doas.conf
 cd ~/
 
