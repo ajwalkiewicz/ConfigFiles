@@ -27,7 +27,7 @@ tee /etc/apt/sources.list<<EOF
 deb http://deb.debian.org/debian buster main contrib non-free
 deb-src http://deb.debian.org/debian buster main contrib non-free
 
-deb http://deb.debian.org/debian-security/ busterupdates main contrib non-free
+deb http://deb.debian.org/debian-security/ buster/updates main contrib non-free
 deb-src http://deb.debian.org/debian-security/ buster/updates main contrib non-free
 
 deb http://deb.debian.org/debian buster-updates main contrib non-free
@@ -36,8 +36,10 @@ EOF
 
 apt update && apt upgrade -y
 
-$INTEL && apt install intel-microcode # For Intel CPU
-$AMD && apt install amd64-microcode # For AMD CPU
+# $INTEL && apt install intel-microcode # For Intel CPU
+# $AMD && apt install amd64-microcode # For AMD CPU
+
+apt install gnupg -y
 
 # For virtualbox
 if [[ $VB ]]; then
@@ -50,7 +52,7 @@ EOF
 fi
 
 # i3wm and enviroment
-apt install gnupg i3 xorg suckless-tools nitrogen compton tilix xsel rofi fonts-noto fonts-mplus xsettingsd lxappearance -y
+apt install i3 xorg suckless-tools nitrogen compton tilix xsel rofi fonts-noto fonts-mplus xsettingsd lxappearance -y
 # apt install lightdm -y # lightdm
 apt install conky -y # System monitor
 
