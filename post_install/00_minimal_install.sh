@@ -52,7 +52,8 @@ EOF
 fi
 
 # i3wm and enviroment
-apt install i3 xorg suckless-tools nitrogen compton tilix xsel rofi fonts-noto fonts-mplus xsettingsd lxappearance -y
+apt install i3 xorg suckless-tools nitrogen compton tilix rxvt-unicode xsel rofi xsettingsd lxappearance -y
+# apt install fonts-noto fonts-mplus -y # fonts
 # apt install lightdm -y # lightdm
 apt install conky -y # System monitor
 
@@ -86,7 +87,6 @@ systemctl start iwd.service
 
 # Battery
 apt install s-tui stress i7z
-
 
 # Graphics
 
