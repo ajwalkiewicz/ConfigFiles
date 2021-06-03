@@ -10,3 +10,4 @@ mkdir Pictures/wallpapers
 mkdir -p ~/.config/rofi
 rofi -dump-config > ~/.config/rofi/config.rasi
 
+cp -r ~/Git/config-files/rofi/* ~/.config/rofi/
