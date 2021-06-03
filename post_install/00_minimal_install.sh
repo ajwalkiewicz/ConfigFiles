@@ -50,7 +50,9 @@ EOF
 fi
 
 # i3wm and enviroment
-apt install gnupg i3 xorg suckless-tools lightdm nitrogen compton tilix xsel rofi fonts-noto fonts-mplus xsettingsd lxappearance -y
+apt install gnupg i3 xorg suckless-tools nitrogen compton tilix xsel rofi fonts-noto fonts-mplus xsettingsd lxappearance -y
+# apt install lightdm -y # lightdm
+apt install conky -y # System monitor
 
 # i3 - main window manager. 
 # If doesn't install all components atomatically, install:
