@@ -29,7 +29,6 @@ sleep 2
 xrandr -s 1440x900
 
 # Set wallpaper(s)
-nitrogen ~/Git/config-files/wallpapers/gruvbox_railway.jpg
 nitrogen --restore &
 
 # Load window Manager
