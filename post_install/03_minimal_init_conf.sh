@@ -5,6 +5,9 @@ mkdir Pictures Video Documents bin
 mkdir Pictures/wallpapers
 
 # Setting i3 configuration files
+ln -s ~/Git/config-files/dot_files/.Xresources
+ln -s ~/Git/config-files/dot_files/.initrc
+ln -s ~/Git/config-files/dot_files/.xserverrc
 
 # Rofi
 mkdir -p ~/.config/rofi

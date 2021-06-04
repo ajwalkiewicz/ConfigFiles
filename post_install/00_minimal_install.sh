@@ -52,7 +52,7 @@ EOF
 fi
 
 # i3wm and enviroment
-apt install i3 xorg suckless-tools nitrogen compton tilix rxvt-unicode xsel rofi xsettingsd lxappearance -y
+apt install i3 xorg suckless-tools nitrogen compton tilix rxvt-unicode imagemagick scrot xsel rofi xsettingsd lxappearance -y
 # apt install fonts-noto fonts-mplus -y # fonts
 # apt install lightdm -y # lightdm
 apt install conky -y # System monitor
@@ -86,12 +86,12 @@ systemctl enable iwd.service
 systemctl start iwd.service
 
 # Battery
-apt install s-tui stress i7z
+apt install s-tui stress i7z -y # tools not necessery for auto-cpufreq
 
 # Graphics
 
 # Audio
-apt install pulseaudio
+apt install pulseaudio -y
 
 # Installing doas - replacement for sudo
 cd
