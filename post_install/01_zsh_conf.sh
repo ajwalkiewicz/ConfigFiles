@@ -16,8 +16,8 @@ if [ ! -d "/usr/local/share/fonts/" ]; then
    mkdir -p /usr/local/share/fonts 
 fi
 
-doas -- wget 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf' /usr/local/share/fonts/
-doas -- wget 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf' /usr/local/share/fonts/
+doas -- wget -O '/usr/local/share/fonts/MesloLGS NF Regular.ttf' 'https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf' 
+doas -- wget -O '/usr/local/share/fonts/MesloLGS NF Bold.ttf''https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf'
 
 # Installing zsh-syntax-highlightning
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
