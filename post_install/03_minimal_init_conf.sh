@@ -1,16 +1,19 @@
 # Minimal init config
 
 # Home directory
-mkdir Pictures Video Documents bin
-mkdir Pictures/wallpapers
+mkdir -p ~/Pictures/wallpapers
+mkdir ~/Video 
+mkdir ~/Documents 
+mkdir ~/bin
 
 # Setting i3 configuration files
-ln -s ~/Git/config-files/dot_files/.Xresources
-ln -s ~/Git/config-files/dot_files/.initrc
-ln -s ~/Git/config-files/dot_files/.xserverrc
+cp ~/Git/config-files/dot_files/Xresources ~/.Xresources
+cp ~/Git/config-files/dot_files/xinitrc ~/.xinitrc
+cp ~/Git/config-files/dot_files/xserverrc ~/.xserverrc
+cp ~/Git/config-files/dot_files/bash_profile ~/.bash_profile
 
 # Rofi
-mkdir -p ~/.config/rofi
-rofi -dump-config > ~/.config/rofi/config.rasi
+# mkdir -p ~/.config/rofi
+# rofi -dump-config > ~/.config/rofi/config.rasi
 
-cp -r ~/Git/config-files/rofi/* ~/.config/rofi/
+# cp -r ~/Git/config-files/rofi/* ~/.config/rofi/
