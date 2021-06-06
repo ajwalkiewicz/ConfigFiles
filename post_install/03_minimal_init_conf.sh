@@ -14,7 +14,7 @@ cp ~/Git/config-files/dot_files/xserverrc ~/.xserverrc
 cp ~/Git/config-files/dot_files/zprofile ~/.zprofile
 
 # i3 config files
-cp -rf ~/Git/config-files/i3 ~/.config/i3/
+cp -Rf ~/Git/config-files/i3 ~/.config/
 
 # Rofi
 # mkdir -p ~/.config/rofi
