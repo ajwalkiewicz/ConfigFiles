@@ -1,3 +1,4 @@
+#!/bin/bash
 # Minimall installation script for debian with i3
 
 VB=false

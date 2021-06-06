@@ -1,3 +1,4 @@
+#!/bin/bash
 # Final tweaks
 
 git clone https://github.com/MichaelThessel/tilix-gruvbox.git

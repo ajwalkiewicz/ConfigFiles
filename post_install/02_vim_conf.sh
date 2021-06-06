@@ -1,3 +1,4 @@
+#!/bin/bash
 # Script for setting up VIM
 
 # coping files from github

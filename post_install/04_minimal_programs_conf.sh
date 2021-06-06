@@ -1,3 +1,4 @@
+#!/bin/bash
 # Additinal progams for minimal installation
 
 # Installing command-line fuzzy finder

@@ -1,3 +1,4 @@
+#!/bin/bash
 # Minimal init config
 
 # Home directory
