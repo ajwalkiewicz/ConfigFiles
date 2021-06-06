@@ -10,10 +10,19 @@ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
 # To do:
 # Tag bar config - require 
+doas -- apt update 
+doas -- apt install \
+gcc make \
+pkg-config autoconf automake \
+python3-docutils \
+libseccomp-dev \
+libjansson-dev \
+libyaml-dev \
+libxml2-dev
 git clone https://github.com/universal-ctags/ctags.git ~/Git/ctags
 cd ~/Git/ctags
 ./autogen.sh
-./configure --prefix=/usrl/local # defaults to /usr/local
+./configure # defaults to /usr/local
 make
-make install # may require extra privileges depending on where to install
+doas -- make install # may require extra privileges depending on where to install
 cd ~/
