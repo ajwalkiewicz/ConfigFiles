@@ -8,7 +8,7 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 
 # flameshoot - screen copy
 # synaptic - gui for managing packages
-doas -- apt install synaptic flameshot tree pv untar nmap -y
+doas -- apt install synaptic flameshot tree pv unzip nmap -y
 
 # pfetch - minimal replacement fo neofetch
 git clone https://github.com/dylanaraps/pfetch.git ~/Git/pfetch
