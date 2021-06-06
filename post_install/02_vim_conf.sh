@@ -9,3 +9,10 @@ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
 # To do:
 # Tag bar config - require 
+git clone https://github.com/universal-ctags/ctags.git ~/Git/ctags
+cd ~/Git/ctags
+./autogen.sh
+./configure --prefix=/usrl/local # defaults to /usr/local
+make
+make install # may require extra privileges depending on where to install
+cd ~/
