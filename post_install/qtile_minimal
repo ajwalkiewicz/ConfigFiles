@@ -4,6 +4,9 @@
 # Update repos and OS
 sudo apt update -y && sudo apt upgrade -y
 
+# Drivers for Intel CPU
+sudo apt install intel-microcode -y
+
 # Minimal programs and X11
 sudo apt install git vim xorg xserver-xorg -y
 
