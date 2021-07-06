@@ -1,0 +1,24 @@
+#!/bin/bash
+# Minimal install
+
+# Update repos and OS
+sudo apt update -y && sudo apt upgrade -y
+
+# Drivers for Intel CPU
+sudo apt install intel-microcode -y
+
+# Minimal programs and X11
+sudo apt install git vim xorg xserver-xorg -y
+
+# Minimal regular programs
+sudo apt install python3 python3-pip python-gobject python-dbus libpangocairo-1.0-0 alsa-utils pavucontrol firefox-esr suckless-tools ranger tilix feh compton rofi -y
+
+# Dependencies for Qtile
+pip3 install xcffib -y && pip3 install --no-cache-dir cairocffi -y
+
+# Qtile
+git clone git://github.com/qtile/qtile.git
+cd qtile
+pip3 install .
+
+echo "qtile start" >> ~/.xinitrc
