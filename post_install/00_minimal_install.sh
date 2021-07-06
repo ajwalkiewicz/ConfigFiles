@@ -37,13 +37,13 @@ EOF
 
 apt update && apt upgrade -y
 
-# $INTEL && apt install intel-microcode # For Intel CPU
-# $AMD && apt install amd64-microcode # For AMD CPU
+$INTEL && apt install intel-microcode # For Intel CPU
+$AMD && apt install amd64-microcode # For AMD CPU
 
 apt install gnupg -y
 
 # For virtualbox
-if [[ $VB ]]; then
+if $VB; then
     wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | apt-key add -
     wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | apt-key add -
     tee /etc/apt/sources.list.d/virtualbox.list<<EOF
@@ -87,12 +87,6 @@ systemctl enable iwd.service
 systemctl start iwd.service
 
 # Battery
-apt install s-tui stress i7z -y # tools not necessery for auto-cpufreq
-
-# Graphics
-
-# Audio
-apt install pulseaudio -y
 
 # Installing doas - replacement for sudo
 cd
