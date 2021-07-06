@@ -1,0 +1,25 @@
+#!/bin/bash
+# bare minimal for system
+# this script should be run before anything else
+# it can be run only by root user
+
+NRUSER=$(echo /home/* | cut -d" " -f1 | cut -d"/" -f3) # non-root user
+
+#  Update repos and OS
+apt update -y && apt upgrade -y                         
+
+# Drivers for Intel CPU
+apt install intel-microcode -y
+
+# Minimal programs and X11
+apt install git -y
+
+# Dependencies for doas - sudo replacement
+apt install build-essential make bison flex libpam0g-dev -y   
+
+# Install doas
+git clone https://github.com/slicer69/doas.git ~/Git/doas
+cd doas
+make install
+mkdir -p /usr/local/etc/
+echo "permit nopass $NRUSER as root" > /usr/local/etc/doas.conf
