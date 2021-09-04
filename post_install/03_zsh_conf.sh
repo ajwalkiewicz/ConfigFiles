@@ -33,4 +33,5 @@ git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$
 cp ~/Git/config-files/dot_files/zshrc ~/.zshrc
 
 # Run powerline 10k configuration
+source ~/.zshrc
 p10k configure
