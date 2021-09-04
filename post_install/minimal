@@ -18,7 +18,7 @@ apt install git -y
 apt install build-essential make bison flex libpam0g-dev -y   
 
 # Install doas
-git clone https://github.com/slicer69/doas.git ~/Git/doas
+git clone https://github.com/slicer69/doas.git
 cd doas
 make install
 mkdir -p /usr/local/etc/
