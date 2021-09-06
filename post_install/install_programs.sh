@@ -110,7 +110,7 @@ install_tilix(){
 programs[14]=install_tilix
 
 install_fdupes(){
-    sudo apt install fdupes
+    sudo apt install fdupes -y
 }
 programs[15]=install_fdupes
 
@@ -169,10 +169,10 @@ programs[25]=install_nfs
 
 install_sublime_text(){
     wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -
-    sudo apt-get install apt-transport-https
+    sudo apt-get install apt-transport-https -y
     echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
-    sudo apt-get update
-    sudo apt-get install sublime-text
+    sudo apt-get update -y
+    sudo apt-get install sublime-text -y
 }
 programs[26]=install_sublime_text
 
@@ -241,7 +241,6 @@ install_vim(){
 
     # To do:
     # Tag bar config - require 
-    sudo apt update 
     sudo apt install \
     gcc make \
     pkg-config autoconf automake \
@@ -249,7 +248,7 @@ install_vim(){
     libseccomp-dev \
     libjansson-dev \
     libyaml-dev \
-    libxml2-dev
+    libxml2-dev -y
     git clone https://github.com/universal-ctags/ctags.git ~/Git/ctags
     cd ~/Git/ctags
     ./autogen.sh
@@ -335,14 +334,14 @@ BUTTON=$?;
 if [ "$BUTTON" == 0 ]; then
     clear
     # sudo apt install $choices
-    echo "Updating repositories"
+    echo "Updating repositories" &>> $LOGS
     sleep 2
-    sudo apt update && sudo apt upgrade -y
+    sudo apt update && sudo apt upgrade -y &>> $LOGS
 
-    echo "Installing required packages"
+    echo "Installing required packages" &>> $LOGS
     sleep 2
     mkdir -p ~/Git
-    sudo apt install git wget flatpak
+    sudo apt install git wget flatpak -y &>> $LOGS
 
     echo "Installing packages"
     sleep 2
@@ -350,6 +349,7 @@ if [ "$BUTTON" == 0 ]; then
     step=$(( 100 / $len ))
     progress=$step
     for choice in $choices; do
+        echo "Installing: ${programs[$choice]}" &>> $LOGS
         ${programs[$choice]} &>> $LOGS
         ( 
             echo $progress
