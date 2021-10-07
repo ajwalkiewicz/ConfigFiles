@@ -1,0 +1,7 @@
+termcapinfo xterm ti@:te@
+defscrollback 10000
+startup_message off
+altscreen on
+term xterm-256color
+
+defbce "on" # Select background color erase
