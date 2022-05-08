@@ -1,2 +1,3 @@
-# vim-configurations
-My vim configs
+# Config files
+
+My personal config files.
