@@ -82,10 +82,17 @@ git
 zsh-syntax-highlighting
 zsh-autosuggestions
 chucknorris
-screen
 )
+# zstyle ':autocomplete:*' fzf-completion no
+# zstyle ':autocomplete:tab:*' widget-style menu-select
+# zstyle ':autocomplete:tab:*' insert-unambiguous no
+# zstyle ':autocomplete:*' min-input 2
 
+# source ~/Git/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 source $ZSH/oh-my-zsh.sh
+
+# bindkey $key[Up] up-line-or-search
+# bindkey $key[Down] down-line-or-select
 
 # User configuration
 
@@ -119,8 +126,8 @@ source $ZSH/oh-my-zsh.sh
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # My aliases
-alias sudo='doas --'
-alias btop='bpytop'
+# alias sudo='doas --'
+# alias btop='bpytop' # instead install: brew install btop
 alias c='clear'
 
 # git aliases
@@ -129,30 +136,38 @@ alias ga='git add'
 alias gc='git commit -m'
 alias gp='git push'
 
-alias pfetch='~/Git/pfetch/pfetch'
+# If using pfech alias it
+[ -x ~/Git/pfetch/pfetch ] && alias pfetch='~/Git/pfetch/pfetch'
 
 if [ -x /usr/bin/dircolors ]; then
-test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-# alias ls='ls --color=auto'
-#alias dir='dir --color=auto'
-#alias vdir='vdir --color=auto'
-
-alias grep='grep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    #alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+    
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
 fi
 
-# some more ls aliases
-# alias ll='ls -alF'
-# alias la='ls -A'
-# alias l='ls -CF'
-alias l='exa -F --color=always --icons'
-alias ls='exa --color=always --icons'
-alias la='exa -lagB --color=always --icons --git --group-directories-first'
-alias ll='exa -l --color=always --icons --git'
-alias lt='exa -lT --color=always --icons --git'
-alias ld='exa -lD --color=always --icons --git'
-# alias lA='exa -lagBiF --color=always --icons --git --group-directories-first'
+if [ -f $HOME/bin/exa ]; then
+    alias l='exa -F --color=always --icons'
+    alias ls='exa --color=always --icons'
+    alias la='exa -lagB --color=always --icons --git --group-directories-first'
+    alias ll='exa -l --color=always --icons --git'
+    alias lt='exa -lT --color=always --icons --git'
+    alias lD='exa -lD --color=always --icons --git'
+    # alias lA='exa -lagBiF --color=always --icons --git --group-directories-first'
+else
+    # standard ls aliases
+    alias ll='ls -alF'
+    alias la='ls -A'
+    alias l='ls -CF'
+fi    
+
+if [ -f /home/linuxbrew/.linuxbrew/bin/bat ]; then
+    alias cat='bat -pp'
+fi
 
 # My history settings
 # Set history size
@@ -162,14 +177,16 @@ setopt HIST_FIND_NO_DUPS
 
 # Setting vim key navigation
 # bindkey -v
-alias pfetch='~/Git/pfetch/pfetch'
 
-# settigns for urxvt
-xrdb -merge ~/.Xresources
-# TERM=rxvt-unicode
-# TERMCMD=rxvt-unicode
-
+# Bookmarks feature
 if [ -d "$HOME/.bookmarks" ]; then
         export CDPATH=".:$HOME/.bookmarks:/"
         alias goto="cd -P"
 fi
+
+#URCVT specific changes
+xrdb -merge ~/.Xresources
+# TERM=rxvt-unicode
+# TERMCMD=rxvt-unicode
+TERM=xterm-256color
+
