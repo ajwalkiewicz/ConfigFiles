@@ -3,3 +3,10 @@
 	email = aj.walkiewicz@gmail.com
 [core]
 	editor = vim
+	pager = delta
+[diff]
+	tool = vimdiff
+[delta]
+	side-by-side = true
+[push]
+	default = current

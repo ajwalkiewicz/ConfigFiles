@@ -1,15 +1,21 @@
 #!/usr/bin/bash
+# This is semi-automated setup script for a new Debian/Ubuntu system.
+# It will install packages, set up Oh My Zsh, and do some other configuration.
+# It is not fully automated because some steps require user input, and some steps
+# are better done manually (e.g. setting up VSCode, logging into ZEN browser, etc.).
+# It is also not idempotent, so it should only be run once on a new system.
 
 # Upgrade system
 sudo apt update && sudo apt upgrade --yes
 
-# Commona packages
+# Common packages
 sudo apt install \
 	vim \
 	zsh \
 	git \
 	exa \
 	mpv \
+	feh \
 	xsel \
 	tree \
 	nemo \
@@ -26,9 +32,10 @@ sudo apt install \
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 brew install \
-	python@3.13 \
+	python@3.14 \
 	btop \
 	bat \
+	git-delta \
 	jandedobbeleer/oh-my-posh/oh-my-posh
 
 # Python
@@ -138,6 +145,11 @@ rm -r \
 	signal-desktop-keyring.gpg \
 	packages-microsoft-prod.deb
 
+# Install auto-cpufreq
+# Docs: https://github.com/AdnanHodzic/auto-cpufreq
+git clone https://github.com/AdnanHodzic/auto-cpufreq.git
+cd auto-cpufreq && sudo ./auto-cpufreq-installer
+
 # Other
 # Gedit
 
@@ -145,7 +157,7 @@ rm -r \
 
 # Checklist
 # Copy .zprofile
-# Set in gnome tewaks 
+# Set in gnome tewaks
 # - focus on hover
 # - CapsLock as Ctrl
 # Get setup for VSCode

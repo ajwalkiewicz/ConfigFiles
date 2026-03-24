@@ -1,5 +1,9 @@
+// Depends on the project's comment out or uncomment the relevant lines,
+// For example, uncomment black and isort if you are using them instead of
+// ruff for formatting and linting.
 {
-  "[html]": {
+  // HTML, JavaScript, TypeScript Settings
+  "[html,javascript,typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
     "editor.indentSize": "tabSize",
@@ -7,41 +11,36 @@
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": "explicit",
       "source.organizeImports": "explicit"
-    },
+    }
   },
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "editor.indentSize": "tabSize",
-    "editor.tabSize": 2,
-    "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit",
-      "source.organizeImports": "explicit"
-    },
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true,
-    "editor.indentSize": "tabSize",
-    "editor.tabSize": 2,
-    "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": "explicit",
-      "source.organizeImports": "explicit"
-    },
-  },
+  // Python Settings
   "[python]": {
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
       "source.fixAll": "explicit",
       "source.organizeImports": "explicit"
     },
+    // "editor.defaultFormatter": "ms-python.black-formatter"
     "editor.defaultFormatter": "charliermarsh.ruff"
   },
+  // "isort.args": ["--profile", "black"],
+  // "python.analysis.fixAll": ["source.unusedImports"],
   "python.testing.pytestArgs": [
     "tests"
   ],
   "python.testing.unittestEnabled": false,
   "python.testing.pytestEnabled": true,
+
+  // Linting settings
+  "python.analysis.languageServerMode": "light",
+  "python.analysis.typeCheckingMode": "off",
+  "python.analysis.indexing": true,
+
+  // Extensions Settings
+  // Ruff
+  "ruff.lineLength": 79,
+
+  // Spell Checker
   "cSpell.words": [
     "dotenv",
     "inlinehilite",
@@ -59,9 +58,14 @@
     "venv",
     "excinfo",
     "stackoverflow",
-    // Project specific words
-    "sessionmaker",
-    "autoflush"
+    "levelname",
+    "sessionstart",
+    "isort",
+    "pylint",
+    "conftest",
+    "dataclass",
+    "pluggy",
+    "abstractmethods"
   ],
   "cSpell.ignorePaths": [
         ".vscode",
@@ -80,5 +84,45 @@
       "addWords": true,
       "scope": "workspace"
     }
-  }
+  },
+
+  // Git Blame
+  "git.blame.editorDecoration.enabled": true,
+  "git.blame.editorDecoration.template": "${authorName}: ${subject}, ${authorDateAgo}",
+
+  // General VSCode Settings
+  "files.exclude": {},
+  "editor.rulers": [79, 88, 100],
+  "workbench.colorTheme": "Default Light Modern",
+  "editor.fontFamily": "'MesloLGS Nerd Font', 'MesloLGS Nerd Font', monospace",
+  // "editor.folding": false
+  "diffEditor.hideUnchangedRegions.enabled": false,
+  "editor.minimap.enabled": false,
+  "files.trimTrailingWhitespace": true,
+
+  // Terminal settings
+  "terminal.integrated.fontFamily": "CaskaydiaMono Nerd Font Mono",
+  "terminal.integrated.fontSize": 16
+
+  // Powershell Terminal Theme
+  // "workbench.colorCustomizations": {
+  //   "terminal.background": "#002456",
+  //   "terminal.foreground": "#CCCCCC",
+  //   "terminal.ansiBlack": "#0C0C0C",
+  //   "terminal.ansiRed": "#C50F1E",
+  //   "terminal.ansiGreen": "#13A10E",
+  //   "terminal.ansiYellow": "#C19B00",
+  //   "terminal.ansiBlue": "#0036DA",
+  //   "terminal.ansiMagenta": "#871698",
+  //   "terminal.ansiCyan": "#3996DD",
+  //   "terminal.ansiWhite": "#CCCCCC",
+  //   "terminal.ansiBrightBlack": "#767676",
+  //   "terminal.ansiBrightRed": "#E74856",
+  //   "terminal.ansiBrightGreen": "#15C60B",
+  //   "terminal.ansiBrightYellow": "#F9F0A5",
+  //   "terminal.ansiBrightBlue": "#3B78FF",
+  //   "terminal.ansiBrightMagenta": "#B4009D",
+  //   "terminal.ansiBrightCyan": "#61D6D6",
+  //   "terminal.ansiBrightWhite": "#F2F2F2"
+  // },
 }

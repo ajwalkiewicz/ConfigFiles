@@ -1,4 +1,7 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.  # Initialization code that may require console input (password prompts, [y/n] # confirmations, etc.) must go above this block; everything else may go below.  if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
 source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 
 # XDG_CONFIG_HOME="$HOME/.config"
@@ -15,7 +18,12 @@ export ZSH="/home/walu/.oh-my-zsh"
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 # ZSH_THEME="robbyrussell"
 # ZSH_THEME="powerlevel9k/powerlevel9k"
-ZSH_THEME="powerlevel10k/powerlevel10k"
+if [[ "$TERMINAL_EMULATOR" == "JetBrains-JediTerm" ]]; then
+    # PyCharm terminal doesn't support powerlevel10k, so use a simpler theme
+    ZSH_THEME="robbyrussell"
+else
+    ZSH_THEME="powerlevel10k/powerlevel10k"
+fi
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -120,15 +128,11 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# My aliases
+# Aliases
 # alias sudo='doas --'
-# alias btop='bpytop' # instead install: brew install btop
 alias c='clear'
+alias cls='clear'
+alias reboot="echo \"Run '/sbin/reboot' to reboot $USER@$HOST\"; return 1"
 
 # git aliases
 alias gs='git status'
@@ -136,15 +140,12 @@ alias ga='git add'
 alias gc='git commit -m'
 alias gp='git push'
 
-# If using pfech alias it
-[ -x ~/Git/pfetch/pfetch ] && alias pfetch='~/Git/pfetch/pfetch'
-
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     #alias ls='ls --color=auto'
     #alias dir='dir --color=auto'
     #alias vdir='vdir --color=auto'
-    
+
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
@@ -163,30 +164,54 @@ else
     alias ll='ls -alF'
     alias la='ls -A'
     alias l='ls -CF'
-fi    
+fi
 
 if [ -f /home/linuxbrew/.linuxbrew/bin/bat ]; then
     alias cat='bat -pp'
+    export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+    export FZF_CTRL_T_OPTS="--preview 'bat --color=always --line-range :50 {}'"
 fi
 
-# My history settings
+if [ -x /usr/bin/pwsh ]; then
+    # alias ls=pwshls
+    alias pwsh="pwsh -NoLogo"
+fi
+
+alias pycharm='pycharm-community'
+alias clock='tty-clock'
+
+# External tools
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+
+# Shell options
+
 # Set history size
-HISTSIZE=10000
+HISTSIZE=100000
+
 # Erase duplicates
 setopt HIST_FIND_NO_DUPS
 
 # Setting vim key navigation
 # bindkey -v
 
-# Bookmarks feature
-if [ -d "$HOME/.bookmarks" ]; then
-        export CDPATH=".:$HOME/.bookmarks:/"
-        alias goto="cd -P"
-fi
-
-#URCVT specific changes
+# URCVT specific changes
 xrdb -merge ~/.Xresources
 # TERM=rxvt-unicode
 # TERMCMD=rxvt-unicode
 TERM=xterm-256color
 
+# Powershell Theme Colors
+ZSH_HIGHLIGHT_STYLES[suffix-alias]=fg="#BBBF40",bold
+ZSH_HIGHLIGHT_STYLES[precommand]=fg="#BBBF40",bold
+ZSH_HIGHLIGHT_STYLES[arg0]=fg="#BBBF40",bold
+export LS_COLORS=$LS_COLORS:'di=1;38;44'
+zstyle ':completion:*' list-colors '=*=90'
+
+# ollama - settings for weak hardware
+export OLLAMA_NUM_PARALLEL=1
+export OLLAMA_MAX_LOADED_MODELS=1
+export OLLAMA_NUM_THREADS=2
