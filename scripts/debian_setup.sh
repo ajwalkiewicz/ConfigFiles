@@ -12,6 +12,7 @@
 #   ./debian_setup.sh --minimal    # Core desktop only (no apps/Homebrew)
 #   ./debian_setup.sh --vm          # VM mode (skips hardware firmware/bluetooth/etc.)
 #   ./debian_setup.sh --vm --minimal # VM + minimal
+#   ./debian_setup.sh --from 15     # Resume from phase 15
 #
 # After running, deploy configs with: ./deploy_configs.sh
 # Then reboot — login at TTY and X will auto-start via .zprofile.
@@ -24,17 +25,29 @@ REPO_DIR="$(dirname "$SCRIPT_DIR")"
 LOG_FILE="$REPO_DIR/debian_setup.log"
 MINIMAL=false
 VM_MODE=false
+START_PHASE=1
 
-for arg in "$@"; do
-	case "$arg" in
+while [[ $# -gt 0 ]]; do
+	case "$1" in
 		--minimal) MINIMAL=true ;;
 		--vm) VM_MODE=true ;;
+		--from) START_PHASE="${2:?'--from requires a phase number (1-22)'}" ; shift ;;
 	esac
+	shift
 done
+
+if ! [[ "$START_PHASE" =~ ^[0-9]+$ ]] || (( START_PHASE < 1 || START_PHASE > 22 )); then
+	echo "ERROR: --from must be a number between 1 and 22" >&2
+	exit 1
+fi
 
 # Logging
 exec > >(tee -a "$LOG_FILE") 2>&1
 echo "=== Debian i3 Setup started at $(date) ==="
+
+if (( START_PHASE > 1 )); then
+	echo ">>> Resuming from Phase $START_PHASE — skipping phases 1 through $((START_PHASE - 1))"
+fi
 
 # ------------------------------------------------------------------------------
 # Helper functions
@@ -56,10 +69,15 @@ confirm() {
 	esac
 }
 
+run_phase() {
+	(( $1 >= START_PHASE ))
+}
+
 # ==============================================================================
 # Phase 1: Non-free firmware repos
 # ==============================================================================
 
+if run_phase 1; then
 section "Phase 1: Enabling non-free firmware repos"
 
 # Ensure non-free and non-free-firmware components are available
@@ -70,11 +88,13 @@ fi
 
 sudo apt update
 sudo apt upgrade --yes
+fi
 
 # ==============================================================================
 # Phase 2: Core X11 + i3
 # ==============================================================================
 
+if run_phase 2; then
 section "Phase 2: Installing X11 + i3 core"
 
 sudo apt install --yes \
@@ -85,11 +105,13 @@ sudo apt install --yes \
 	i3status \
 	i3lock \
 	suckless-tools
+fi
 
 # ==============================================================================
 # Phase 3: Intel hardware firmware (MSI Modern 14) — skipped in VM mode
 # ==============================================================================
 
+if run_phase 3; then
 if [[ "$VM_MODE" == false ]]; then
 	section "Phase 3: Intel firmware"
 
@@ -100,11 +122,13 @@ if [[ "$VM_MODE" == false ]]; then
 else
 	section "Phase 3: Intel firmware (SKIPPED — VM mode)"
 fi
+fi
 
 # ==============================================================================
 # Phase 4: Touchpad (libinput) — skipped in VM mode
 # ==============================================================================
 
+if run_phase 4; then
 if [[ "$VM_MODE" == false ]]; then
 	section "Phase 4: Touchpad / input drivers"
 
@@ -115,11 +139,13 @@ if [[ "$VM_MODE" == false ]]; then
 else
 	section "Phase 4: Touchpad (SKIPPED — VM mode)"
 fi
+fi
 
 # ==============================================================================
 # Phase 5: Audio — PipeWire + WirePlumber
 # ==============================================================================
 
+if run_phase 5; then
 section "Phase 5: Audio (PipeWire)"
 
 sudo apt install --yes \
@@ -133,11 +159,13 @@ sudo apt install --yes \
 # Enable PipeWire for the user
 systemctl --user --now enable pipewire pipewire-pulse wireplumber 2>&1 || \
 	echo "WARN: Could not enable PipeWire user services (will work after first X session)"
+fi
 
 # ==============================================================================
 # Phase 6: Bluetooth — skipped in VM mode
 # ==============================================================================
 
+if run_phase 6; then
 if [[ "$VM_MODE" == false ]]; then
 	section "Phase 6: Bluetooth"
 
@@ -149,11 +177,13 @@ if [[ "$VM_MODE" == false ]]; then
 else
 	section "Phase 6: Bluetooth (SKIPPED — VM mode)"
 fi
+fi
 
 # ==============================================================================
 # Phase 7: Network — NetworkManager
 # ==============================================================================
 
+if run_phase 7; then
 section "Phase 7: Network (NetworkManager)"
 
 sudo apt install --yes \
@@ -161,11 +191,13 @@ sudo apt install --yes \
 	network-manager-gnome
 
 sudo systemctl enable NetworkManager
+fi
 
 # ==============================================================================
 # Phase 8: Desktop utilities
 # ==============================================================================
 
+if run_phase 8; then
 section "Phase 8: Desktop utilities"
 
 DESKTOP_PKGS=(
@@ -192,11 +224,13 @@ if [[ "$VM_MODE" == false ]]; then
 fi
 
 sudo apt install --yes "${DESKTOP_PKGS[@]}"
+fi
 
 # ==============================================================================
 # Phase 9: Terminal, shell, file manager, and common tools
 # ==============================================================================
 
+if run_phase 9; then
 section "Phase 9: Core applications"
 
 sudo apt install --yes \
@@ -230,11 +264,13 @@ sudo update-alternatives --set x-terminal-emulator "$TILIX_BIN"
 
 # Set zsh as default shell (sudo avoids interactive password prompt)
 sudo chsh -s /usr/bin/zsh "$USER"
+fi
 
 # ==============================================================================
 # Phase 10: Nerd Fonts (MesloLGS NF)
 # ==============================================================================
 
+if run_phase 10; then
 section "Phase 10: Nerd Fonts"
 
 FONT_DIR="$HOME/.local/share/fonts"
@@ -252,11 +288,13 @@ if ! fc-list | grep -qi "MesloLGS"; then
 else
 	echo "MesloLGS NF already installed, skipping."
 fi
+fi
 
 # ==============================================================================
 # Phase 11: i3lock-color (build from source)
 # ==============================================================================
 
+if run_phase 11; then
 section "Phase 11: i3lock-color"
 
 if command -v i3lock-color &>/dev/null || i3lock --version 2>&1 | grep -qi color; then
@@ -294,11 +332,13 @@ rm -rf "$BUILD_DIR"
 echo "i3lock-color installed."
 
 fi # end i3lock-color guard
+fi
 
 # ==============================================================================
 # Phase 12: Pop GTK Theme + Icons
 # ==============================================================================
 
+if run_phase 12; then
 section "Phase 12: Pop GTK Theme"
 
 sudo apt install --yes \
@@ -333,11 +373,13 @@ if [ ! -d /usr/share/themes/Pop ] && [ ! -d "$HOME/.themes/Pop" ]; then
 else
 	echo "Pop theme already present, skipping."
 fi
+fi
 
 # ==============================================================================
 # Phase 13: Logind — lid close / suspend — skipped in VM mode
 # ==============================================================================
 
+if run_phase 13; then
 if [[ "$VM_MODE" == false ]]; then
 	section "Phase 13: Logind configuration"
 
@@ -353,14 +395,17 @@ if [[ "$VM_MODE" == false ]]; then
 else
 	section "Phase 13: Logind (SKIPPED — VM mode)"
 fi
+fi
 
 # ==============================================================================
 # Phase 14: Flatpak setup
 # ==============================================================================
 
+if run_phase 14; then
 section "Phase 14: Flatpak"
 
 flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+fi
 
 if [[ "$MINIMAL" == false ]]; then
 
@@ -368,6 +413,7 @@ if [[ "$MINIMAL" == false ]]; then
 # Phase 15: Homebrew + CLI tools
 # ==============================================================================
 
+if run_phase 15; then
 section "Phase 15: Homebrew + CLI tools"
 
 if ! command -v brew &>/dev/null; then
@@ -383,34 +429,41 @@ brew install \
 	jandedobbeleer/oh-my-posh/oh-my-posh \
 	go \
 	uv
+fi
 
 # ==============================================================================
 # Phase 16: Microsoft products
 # ==============================================================================
 
+if run_phase 16; then
 section "Phase 16: Microsoft (VSCode + PowerShell)"
 
+# --- VS Code ---
 if ! command -v code &>/dev/null; then
-	# Microsoft prod repo for Debian 13 (PowerShell)
-	wget -qO /tmp/packages-microsoft-prod.deb https://packages.microsoft.com/config/debian/13/packages-microsoft-prod.deb
-	sudo dpkg -i /tmp/packages-microsoft-prod.deb
-	rm -f /tmp/packages-microsoft-prod.deb
-
-	# VS Code has its own repo (not included in packages-microsoft-prod)
 	wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | \
 		sudo tee /etc/apt/keyrings/packages.microsoft.gpg > /dev/null
 	echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" | \
 		sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
-
 	sudo apt update
-	sudo apt install --yes code powershell
+	sudo apt install --yes code
+fi
+
+# --- PowerShell (not in Debian 13 prod repo — install .deb from GitHub) ---
+if ! command -v pwsh &>/dev/null; then
+	PS_VERSION=$(curl -fsSL https://api.github.com/repos/PowerShell/PowerShell/releases/latest | grep '"tag_name"' | cut -d'"' -f4)
+	PS_DEB="powershell_${PS_VERSION#v}-1.deb_amd64.deb"
+	wget -qO "/tmp/$PS_DEB" "https://github.com/PowerShell/PowerShell/releases/download/${PS_VERSION}/${PS_DEB}"
+	sudo dpkg -i "/tmp/$PS_DEB" || sudo apt install --fix-broken --yes
+	rm -f "/tmp/$PS_DEB"
 	pwsh -c "Install-Module -Name PSFzf -Scope CurrentUser -Force" || true
+fi
 fi
 
 # ==============================================================================
 # Phase 17: GitHub CLI
 # ==============================================================================
 
+if run_phase 17; then
 section "Phase 17: GitHub CLI"
 
 if ! command -v gh &>/dev/null; then
@@ -423,11 +476,13 @@ if ! command -v gh &>/dev/null; then
 	sudo apt update
 	sudo apt install --yes gh
 fi
+fi
 
 # ==============================================================================
 # Phase 18: Oh My Zsh + plugins
 # ==============================================================================
 
+if run_phase 18; then
 section "Phase 18: Oh My Zsh"
 
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
@@ -442,22 +497,26 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
 	# NOTE: Plugin config (plugins=, ZSH_HIGHLIGHT_STYLES, LS_COLORS) lives in
 	# config/.zshrc — deploy_configs.sh symlinks it to ~/.zshrc.
 fi
+fi
 
 # ==============================================================================
 # Phase 19: FZF
 # ==============================================================================
 
+if run_phase 19; then
 section "Phase 19: FZF"
 
 if [ ! -d "$HOME/.fzf" ]; then
 	git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf"
 	"$HOME/.fzf/install" --all
 fi
+fi
 
 # ==============================================================================
 # Phase 20: Applications (ZEN browser, Signal, NordVPN)
 # ==============================================================================
 
+if run_phase 20; then
 section "Phase 20: Applications"
 
 # ZEN browser via Flatpak
@@ -480,11 +539,13 @@ if confirm "Install NordVPN?"; then
 	sh <(curl -sSf https://downloads.nordcdn.com/apps/linux/install.sh) || echo "WARN: NordVPN installation failed."
 	echo "Run 'nordvpn login' and 'nordvpn connect' after setup."
 fi
+fi
 
 # ==============================================================================
 # Phase 21: Nemo file manager setup
 # ==============================================================================
 
+if run_phase 21; then
 section "Phase 21: Nemo configuration"
 
 xdg-mime default nemo.desktop inode/directory application/x-gnome-saved-search 2>/dev/null || true
@@ -492,11 +553,13 @@ mkdir -p "$HOME/.gnome2/accels"
 touch "$HOME/.gnome2/accels/nemo"
 NEMO_ACCEL='(gtk_accel_path "<Actions>/DirViewActions/OpenInTerminal" "F4")'
 grep -qF "$NEMO_ACCEL" "$HOME/.gnome2/accels/nemo" || echo "$NEMO_ACCEL" >> "$HOME/.gnome2/accels/nemo"
+fi
 
 # ==============================================================================
 # Phase 22: auto-cpufreq
 # ==============================================================================
 
+if run_phase 22; then
 section "Phase 22: auto-cpufreq"
 
 if [[ "$VM_MODE" == true ]]; then
@@ -510,6 +573,7 @@ elif confirm "Install auto-cpufreq (laptop power management)?"; then
 	sudo ./auto-cpufreq-installer
 	cd "$REPO_DIR"
 	rm -rf "$BUILD_DIR"
+fi
 fi
 
 fi # end of --minimal guard
