@@ -264,6 +264,17 @@ sudo update-alternatives --set x-terminal-emulator "$TILIX_BIN"
 
 # Set zsh as default shell (sudo avoids interactive password prompt)
 sudo chsh -s /usr/bin/zsh "$USER"
+
+# Set VIM as default editor
+sudo update-alternatives --install /usr/bin/editor editor /usr/bin/vim 100
+sudo update-alternatives --set editor /usr/bin/vim
+
+# Install Vundle (VIM plugin manager)
+if [ ! -d "$HOME/.vim/bundle/Vundle.vim" ]; then
+	git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+fi
+
+
 fi
 
 # ==============================================================================
@@ -345,22 +356,28 @@ sudo apt install --yes \
 	gnome-themes-extra \
 	adwaita-icon-theme
 
-# Install Pop GTK theme from System76
+# Install Pop GTK theme from System76 (requires building from source)
 if [ ! -d /usr/share/themes/Pop ] && [ ! -d "$HOME/.themes/Pop" ]; then
 	echo "Installing Pop GTK theme..."
 	mkdir -p "$HOME/.themes" "$HOME/.icons"
 	tmp_dir=$(mktemp -d)
 
-	# Pop GTK Theme
+	# Build dependencies for Pop GTK theme
+	sudo apt install --yes meson sassc libglib2.0-dev
+
+	# Pop GTK Theme — must be built with meson
 	GIT_TERMINAL_PROMPT=0 git clone --depth 1 https://github.com/pop-os/gtk-theme.git "$tmp_dir/pop-theme" 2>/dev/null || \
 		echo "WARN: Pop theme clone failed. Install manually via lxappearance."
 
 	if [ -d "$tmp_dir/pop-theme" ]; then
-		# Copy theme directories if they exist
-		find "$tmp_dir/pop-theme" -maxdepth 1 -name "Pop*" -type d -exec cp -r {} "$HOME/.themes/" \;
+		cd "$tmp_dir/pop-theme"
+		meson setup build -Dprefix="$HOME/.local"
+		ninja -C build install
+		cd "$REPO_DIR"
+		echo "Pop GTK theme built and installed to ~/.local/share/themes/"
 	fi
 
-	# Pop Icon Theme
+	# Pop Icon Theme (pre-built, just copy)
 	GIT_TERMINAL_PROMPT=0 git clone --depth 1 https://github.com/pop-os/icon-theme.git "$tmp_dir/pop-icons" 2>/dev/null || \
 		echo "WARN: Pop icon theme clone failed. Install manually."
 
@@ -487,16 +504,26 @@ section "Phase 18: Oh My Zsh"
 
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
 	sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-
-	# Plugins
-	git clone https://github.com/zsh-users/zsh-autosuggestions \
-		"${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions"
-	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git \
-		"${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting"
-
-	# NOTE: Plugin config (plugins=, ZSH_HIGHLIGHT_STYLES, LS_COLORS) lives in
-	# config/.zshrc — deploy_configs.sh symlinks it to ~/.zshrc.
 fi
+
+# Plugins
+ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+
+[ -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ] || \
+	git clone https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+
+[ -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ] || \
+	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+
+# Powerlevel10k theme
+[ -d "$ZSH_CUSTOM/themes/powerlevel10k" ] || \
+	git clone --depth 1 https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM/themes/powerlevel10k"
+
+# chucknorris plugin depends on fortune
+sudo apt install --yes fortune-mod
+
+# NOTE: Plugin config (plugins=, ZSH_HIGHLIGHT_STYLES, LS_COLORS) lives in
+# config/.zshrc — deploy_configs.sh symlinks it to ~/.zshrc.
 fi
 
 # ==============================================================================
