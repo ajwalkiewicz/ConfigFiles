@@ -219,11 +219,14 @@ sudo apt install --yes \
 	python3-pip \
 	flatpak
 
-# Set tilix as default terminal (register if needed, then set)
-if ! update-alternatives --query x-terminal-emulator 2>/dev/null | grep -q /usr/bin/tilix; then
-	sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/tilix 50
+# Set tilix as default terminal
+# Debian registers tilix.wrapper, not tilix, in the alternatives system
+TILIX_BIN="/usr/bin/tilix.wrapper"
+[ -x "$TILIX_BIN" ] || TILIX_BIN="/usr/bin/tilix"
+if ! update-alternatives --query x-terminal-emulator 2>/dev/null | grep -q "$TILIX_BIN"; then
+	sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator "$TILIX_BIN" 50
 fi
-sudo update-alternatives --set x-terminal-emulator /usr/bin/tilix
+sudo update-alternatives --set x-terminal-emulator "$TILIX_BIN"
 
 # Set zsh as default shell (sudo avoids interactive password prompt)
 sudo chsh -s /usr/bin/zsh "$USER"
