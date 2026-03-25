@@ -20,8 +20,9 @@ generate_help() {
 
     while IFS= read -r line; do
         # Detect section headers: "# Key Bindings — Launchers & Applications"
-        if [[ "$line" =~ ^#\ (.+) ]] && [[ ! "$line" =~ ^#\ =+ ]]; then
+        if [[ "$line" =~ ^#\ (.+) ]]; then
             candidate="${BASH_REMATCH[1]}"
+            if [[ "$candidate" =~ ^=+ ]]; then continue; fi
             # Skip short comments; keep only meaningful section titles
             if (( ${#candidate} > 5 )); then
                 section="$candidate"
@@ -69,8 +70,9 @@ generate_help() {
     local result=""
     local last_section=""
     while IFS= read -r line; do
-        if [[ "$line" =~ ^#\ (.+) ]] && [[ ! "$line" =~ ^#\ =+ ]]; then
+        if [[ "$line" =~ ^#\ (.+) ]]; then
             candidate="${BASH_REMATCH[1]}"
+            if [[ "$candidate" =~ ^=+ ]]; then continue; fi
             if (( ${#candidate} > 5 )); then
                 current_section="$candidate"
             fi
