@@ -54,8 +54,8 @@ bindsym $mod+n exec nemo
 # Kill focused window
 bindsym $mod+q kill
 
-# Help — show keybinding cheat-sheet (Shift+Alt+?)
-bindsym Shift+Mod1+question exec --no-startup-id sh ~/.config/i3/scripts/show_help.sh
+# Help — show keybinding cheat-sheet (Alt+?)
+bindsym Mod1+Shift+slash exec --no-startup-id sh ~/.config/i3/scripts/show_help.sh
 
 # ==============================================================================
 # Key Bindings — Media & Hardware (laptop function keys)
