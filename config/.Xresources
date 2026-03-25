@@ -1,27 +1,36 @@
-! Xcursor.theme: ArchCursorTheme
-! also set with lxappearance and double check the following:
-! /usr/share/icons/default/index.theme
-! ~/.icons/default/index.theme
-! ~/.config/gtk-3.0/settings.ini
-! ~/.gtkrc-2.0
+! ~/.Xresources - X resource settings
+! Loaded by xrdb in xinitrc. Tilix and GTK apps mostly ignore these.
 
+! ===========================================================================
+! Font rendering - DPI and hinting
+! ===========================================================================
+! DPI 96 is standard for 14" 1080p. Increase to 120 if text feels small.
+Xft.dpi: 96
+Xft.autohint: 0
+Xft.lcdfilter: lcddefault
+Xft.hintstyle: hintfull
+Xft.hinting: 1
+Xft.antialias: 1
+Xft.rgba: rgb
+
+! ===========================================================================
+! Cursor
+! ===========================================================================
+Xcursor.size: 24
+Xcursor.theme: Adwaita
+
+! ===========================================================================
+! URxvt (legacy — only applies when rxvt-unicode is installed)
+! ===========================================================================
 URxvt.font: xft:MesloLGS NF:size=10
 URxvt.iso14755: false
 URxvt.iso14755_52: false
 URxvt*scrollBar: false
-!clickable urls
 URxvt.perl-ext-common: default,matcher
 URxvt.url-launcher: /usr/bin/xdg-open
 URxvt.matcher.button: 1
 
-! -----------------------------------------------------------------------------
-! File: gruvbox-urxvt256.xresources
-! Description: Retro groove colorscheme generalized
-! Author: morhetz <morhetz@gmail.com>
-! Source: https://github.com/morhetz/gruvbox-generalized
-! Last Modified: 13 Dec 2013
-! -----------------------------------------------------------------------------
-
+! Gruvbox colorscheme for URxvt
 URxvt.color24:  #076678
 URxvt.color66:  #427b58
 URxvt.color88:  #9d0006

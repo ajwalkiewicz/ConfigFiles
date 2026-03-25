@@ -199,7 +199,7 @@ setopt HIST_FIND_NO_DUPS
 # bindkey -v
 
 # URCVT specific changes
-xrdb -merge ~/.Xresources
+# xrdb is handled by xinitrc, not needed here
 # TERM=rxvt-unicode
 # TERMCMD=rxvt-unicode
 TERM=xterm-256color

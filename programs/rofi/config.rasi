@@ -1,0 +1,111 @@
+/* Rofi configuration — Pop!_OS light theme
+ * For Debian 13 + i3
+ * Place at: ~/.config/rofi/config.rasi
+ */
+
+configuration {
+    modi:               "drun,run,window,ssh";
+    show-icons:         true;
+    icon-theme:         "Pop";
+    terminal:           "tilix";
+    drun-display-format: "{name}";
+    font:               "MesloLGS NF 11";
+}
+
+/* Pop!_OS Light inspired colors */
+* {
+    bg:         #F6F6F6;
+    bg-alt:     #EBEBEB;
+    fg:         #333333;
+    fg-alt:     #666666;
+    accent:     #FBB86C;
+    urgent:     #d75f5f;
+    transparent: rgba(0, 0, 0, 0);
+
+    background-color:   @transparent;
+    text-color:         @fg;
+}
+
+window {
+    background-color:   @bg;
+    border:             2px;
+    border-color:       @accent;
+    border-radius:      6px;
+    padding:            8px;
+    width:              40%;
+}
+
+mainbox {
+    border:     0;
+    padding:    0;
+    children:   [ inputbar, listview ];
+}
+
+inputbar {
+    spacing:    8px;
+    padding:    8px;
+    background-color: @bg-alt;
+    border-radius:    4px;
+    children:   [ prompt, entry ];
+}
+
+prompt {
+    background-color: @accent;
+    text-color:       #333333;
+    padding:          4px 8px;
+    border-radius:    4px;
+}
+
+entry {
+    padding:            4px;
+    placeholder:        "Search...";
+    placeholder-color:  @fg-alt;
+}
+
+listview {
+    lines:      12;
+    columns:    1;
+    spacing:    4px;
+    padding:    8px 0 0 0;
+    scrollbar:  false;
+    border:     0;
+}
+
+element {
+    padding:        6px 8px;
+    border-radius:  4px;
+    spacing:        8px;
+}
+
+element normal.normal {
+    background-color: @bg;
+    text-color:       @fg;
+}
+
+element normal.active {
+    background-color: @bg;
+    text-color:       @accent;
+}
+
+element selected.normal {
+    background-color: @accent;
+    text-color:       #333333;
+}
+
+element selected.active {
+    background-color: @accent;
+    text-color:       #333333;
+}
+
+element alternate.normal {
+    background-color: @bg;
+    text-color:       @fg;
+}
+
+element-icon {
+    size: 24px;
+}
+
+element-text {
+    vertical-align: 0.5;
+}
