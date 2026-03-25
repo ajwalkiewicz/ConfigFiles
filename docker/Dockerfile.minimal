@@ -1,0 +1,104 @@
+FROM ubuntu:24.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=UTC
+
+# Upgrade and install core packages
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends \
+    sudo \
+    git \
+    vim \
+    zsh \
+    tree \
+    curl \
+    wget \
+    htop \
+    jq \
+    openssh-client \
+    openssh-server \
+    python3 \
+    python3-venv \
+    python3-pip \
+    nodejs \
+    npm \
+    screen \
+    ncdu \
+    ripgrep \
+    fd-find \
+    tzdata \
+    locales \
+    ca-certificates \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set up locale: uncomment en_US.UTF-8 and generate
+RUN sed -i 's/^# *\(en_US.UTF-8 UTF-8\)/\1/' /etc/locale.gen && \
+    locale-gen en_US.UTF-8 && \
+    update-locale LANG=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+
+# Create user 'walu' with password 'walu'
+RUN useradd -m -s /usr/bin/zsh walu && \
+    echo 'walu:walu' | chpasswd && \
+    usermod -aG sudo walu && \
+    echo 'walu ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+# Switch to walu user
+USER walu
+
+# Ensure workspace exists and is owned by walu
+RUN sudo mkdir -p /workspace && sudo chown walu:walu /workspace
+
+# Install Oh My Zsh (unattended) — must run without sudo so it installs to /home/walu
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+
+# Copy user configs AFTER Oh My Zsh install (which overwrites .zshrc with a default)
+COPY --chown=walu:walu config/ /home/walu/
+
+# Install Homebrew (Linuxbrew) — let the installer use sudo internally
+RUN NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# Add Homebrew to PATH for all subsequent layers (explicit PATH, no variable expansion)
+ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}"
+
+# Install Homebrew packages
+RUN brew install \
+    python@3.14 \
+    btop \
+    bat \
+    git-delta \
+    uv \
+    go \
+    fzf \
+    eza \
+    neofetch \
+    && brew cleanup
+
+# Provide 'fd' command (fd-find installs fdfind)
+RUN sudo ln -s /usr/bin/fdfind /usr/local/bin/fd
+
+# Install zsh plugins
+RUN git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions && \
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+
+# Install Powerlevel10k theme
+RUN git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
+
+# Install Claude Code globally
+# RUN sudo npm install -g @anthropic-ai/claude-code
+
+# Install Vundle (Vim plugin manager)
+RUN git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
+# Copy vim color schemes and indent files
+COPY --chown=walu:walu programs/vim/colors/ /home/walu/.vim/colors/
+COPY --chown=walu:walu programs/vim/indent/ /home/walu/.vim/indent/
+
+# Install Vim plugins from .vimrc
+RUN vim +PluginInstall +qall || true
+
+WORKDIR /workspace
+
+CMD ["zsh"]

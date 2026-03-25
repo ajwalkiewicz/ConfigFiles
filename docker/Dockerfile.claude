@@ -1,0 +1,43 @@
+FROM ubuntu:24.04
+
+
+# Upgrade system
+RUN apt update && apt upgrade --yes
+
+# Common packages
+RUN apt install \
+    jq \
+    vim \
+    zsh \
+    git \
+    tree \
+    curl \
+    htop \
+    sudo \
+    screen \
+    python3-venv \
+    python3-pip \
+    openssh-server \
+    openssh-client \
+    nodejs \
+    npm \
+    --yes
+
+# Add user to sudo group
+RUN usermod -aG sudo ubuntu
+
+
+# Install Claude Code globally (accessible system-wide via npm global bin)
+RUN npm install -g @anthropic-ai/claude-code
+
+# Set up a non-root user to run the application
+USER ubuntu
+
+# Set up alias for claude command and add npm global bin to PATH
+RUN echo "alias claude='claude --settings /workspace/.claude/settings.json'" >> /home/ubuntu/.bashrc
+RUN echo 'export PATH="$HOME/.local/bin:$PATH"' >> /home/ubuntu/.bashrc
+
+# Install Claude code with it's own command
+RUN claude install
+
+WORKDIR /workspace
