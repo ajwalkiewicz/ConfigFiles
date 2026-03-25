@@ -312,7 +312,7 @@ if [ ! -d /usr/share/themes/Pop ] && [ ! -d "$HOME/.themes/Pop" ]; then
 	tmp_dir=$(mktemp -d)
 
 	# Pop GTK Theme
-	git clone --depth 1 https://github.com/AshGrowem/pop-theme.git "$tmp_dir/pop-theme" 2>/dev/null || \
+	GIT_TERMINAL_PROMPT=0 git clone --depth 1 https://github.com/pop-os/gtk-theme.git "$tmp_dir/pop-theme" 2>/dev/null || \
 		echo "WARN: Pop theme clone failed. Install manually via lxappearance."
 
 	if [ -d "$tmp_dir/pop-theme" ]; then
@@ -321,7 +321,7 @@ if [ ! -d /usr/share/themes/Pop ] && [ ! -d "$HOME/.themes/Pop" ]; then
 	fi
 
 	# Pop Icon Theme
-	git clone --depth 1 https://github.com/AshGrowem/pop-icon-theme.git "$tmp_dir/pop-icons" 2>/dev/null || \
+	GIT_TERMINAL_PROMPT=0 git clone --depth 1 https://github.com/pop-os/icon-theme.git "$tmp_dir/pop-icons" 2>/dev/null || \
 		echo "WARN: Pop icon theme clone failed. Install manually."
 
 	if [ -d "$tmp_dir/pop-icons/Pop" ]; then
