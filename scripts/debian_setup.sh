@@ -203,7 +203,6 @@ sudo apt install --yes \
 	vim \
 	zsh \
 	git \
-	exa \
 	mpv \
 	feh \
 	tree \
@@ -211,7 +210,6 @@ sudo apt install --yes \
 	tilix \
 	screen \
 	ffmpeg \
-	neofetch \
 	curl \
 	wget \
 	gnupg \
@@ -221,7 +219,10 @@ sudo apt install --yes \
 	python3-pip \
 	flatpak
 
-# Set tilix as default terminal (non-interactive)
+# Set tilix as default terminal (register if needed, then set)
+if ! update-alternatives --query x-terminal-emulator 2>/dev/null | grep -q /usr/bin/tilix; then
+	sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/tilix 50
+fi
 sudo update-alternatives --set x-terminal-emulator /usr/bin/tilix
 
 # Set zsh as default shell (sudo avoids interactive password prompt)
