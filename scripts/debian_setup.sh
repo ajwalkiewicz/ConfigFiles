@@ -355,21 +355,6 @@ else
 fi
 
 # ==============================================================================
-# Phase 13b: VirtualBox Guest Additions (VM mode only)
-# ==============================================================================
-
-if [[ "$VM_MODE" == true ]]; then
-	section "Phase 13b: VirtualBox Guest Additions"
-
-	if confirm "Install VirtualBox Guest Additions? (skip if using QEMU/KVM)"; then
-		sudo apt install --yes \
-			virtualbox-guest-x11 \
-			virtualbox-guest-utils \
-			virtualbox-guest-dkms
-	fi
-fi
-
-# ==============================================================================
 # Phase 14: Flatpak setup
 # ==============================================================================
 
@@ -406,14 +391,10 @@ brew install \
 section "Phase 16: Microsoft (VSCode + PowerShell)"
 
 if ! command -v code &>/dev/null; then
-	# Get the correct Microsoft repo for Debian
-	wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /tmp/microsoft.gpg
-	sudo install -o root -g root -m 644 /tmp/microsoft.gpg /etc/apt/keyrings/microsoft.gpg
-	echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/code stable main" | \
-		sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
-	echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/microsoft.gpg] https://packages.microsoft.com/repos/microsoft-debian-trixie-prod trixie main" | \
-		sudo tee /etc/apt/sources.list.d/microsoft.list > /dev/null
-	rm -f /tmp/microsoft.gpg
+	# Microsoft repo for Debian 13 (Trixie)
+	wget -qO /tmp/packages-microsoft-prod.deb https://packages.microsoft.com/config/debian/13/packages-microsoft-prod.deb
+	sudo dpkg -i /tmp/packages-microsoft-prod.deb
+	rm -f /tmp/packages-microsoft-prod.deb
 	sudo apt update
 	sudo apt install --yes code powershell
 	pwsh -c "Install-Module -Name PSFzf -Scope CurrentUser -Force" || true
