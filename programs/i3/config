@@ -13,9 +13,12 @@ font pango:MesloLGS NF 9
 floating_modifier $mod
 
 # Window borders
-default_border pixel 2
-default_floating_border pixel 2
+default_border pixel 3
+default_floating_border pixel 3
 hide_edge_borders smart
+
+# Force consistent borders on all windows (some apps override defaults)
+for_window [class=".*"] border pixel 3
 
 # Gaps (Pop!_OS-like spacing)
 gaps inner 8
@@ -38,7 +41,7 @@ exec_always --no-startup-id feh --bg-fill --no-fehbg "$HOME/.wallpaper" 2>/dev/n
 bindsym $mod+Return exec tilix
 
 # Application launcher (rofi)
-bindsym $mod+d exec --no-startup-id rofi -show drun -show-icons
+bindsym $mod+slash exec --no-startup-id rofi -show drun -show-icons
 bindsym $mod+bar exec --no-startup-id rofi -show window -show-icons
 
 # Lock screen
@@ -49,7 +52,13 @@ bindsym $mod+Shift+s exec --no-startup-id flameshot gui
 bindsym Print exec --no-startup-id flameshot gui
 
 # File manager
-bindsym $mod+n exec nemo
+bindsym $mod+f exec nemo
+
+# Browser
+bindsym $mod+b exec flatpak app.zen_browser.zen
+
+# Monitor layout (rofi menu)
+bindsym $mod+p exec --no-startup-id bash ~/.config/i3/scripts/monitor_setup.sh
 
 # Kill focused window
 bindsym $mod+q kill
@@ -113,7 +122,7 @@ bindsym $mod+b split h
 bindsym $mod+v split v
 
 # Fullscreen
-bindsym $mod+f fullscreen toggle
+bindsym $mod+m fullscreen toggle
 
 # Layout mode
 bindsym $mod+s layout stacking
@@ -209,7 +218,7 @@ bindsym $mod+r mode "resize"
 # class                 border  bground text    indicator child_border
 client.focused          #FBB86C #FBB86C #333333 #FBB86C   #FBB86C
 client.focused_inactive #333333 #5F676A #FFFFFF #484E50   #5F676A
-client.unfocused        #333333 #222222 #888888 #292D2E   #222222
+client.unfocused        #333333 #222222 #888888 #292D2E   #444444
 client.urgent           #2F343A #900000 #FFFFFF #900000   #900000
 client.placeholder      #000000 #0C0C0C #FFFFFF #000000   #0C0C0C
 

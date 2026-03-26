@@ -243,6 +243,7 @@ sudo apt install --yes \
 	nemo \
 	tilix \
 	screen \
+	tty-clock \
 	ffmpeg \
 	curl \
 	wget \

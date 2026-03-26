@@ -208,6 +208,10 @@ if [[ "$SYSTEM_MODE" == true && "$USE_XORG_SYSTEM" == "yes" ]]; then
 	sudo mkdir -p /etc/X11/xorg.conf.d
 	sudo cp "$REPO_DIR/programs/xorg/40-libinput.conf" /etc/X11/xorg.conf.d/40-libinput.conf
 	echo "COPY: /etc/X11/xorg.conf.d/40-libinput.conf"
+
+	# Keyboard — CapsLock → Ctrl
+	sudo cp "$REPO_DIR/programs/xorg/00-keyboard.conf" /etc/X11/xorg.conf.d/00-keyboard.conf
+	echo "COPY: /etc/X11/xorg.conf.d/00-keyboard.conf"
 elif [[ "$SYSTEM_MODE" == false ]]; then
 	echo ""
 	echo "NOTE: Run with --system to deploy /etc/X11/xorg.conf.d/ configs (sudo)."
