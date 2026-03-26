@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Logout
+Comment=End the i3 session
+Exec=i3-msg exit
+Icon=system-log-out
+Terminal=false
+Type=Application
+Categories=System;
+Keywords=logout;exit;session;

@@ -122,6 +122,13 @@ if [[ "$USE_I3" == "yes" ]]; then
 	# Dunst
 	link_config "$REPO_DIR/programs/dunst" "$HOME/.config/dunst"
 
+	# Desktop entries (power actions visible in rofi drun)
+	DESKTOP_DIR="$HOME/.local/share/applications"
+	mkdir -p "$DESKTOP_DIR"
+	for entry in "$REPO_DIR/programs/desktop-entries"/*.desktop; do
+		[ -f "$entry" ] && link_config "$entry" "$DESKTOP_DIR/$(basename "$entry")"
+	done
+
 
 else
 	echo ""

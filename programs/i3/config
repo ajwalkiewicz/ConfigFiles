@@ -21,7 +21,7 @@ hide_edge_borders smart
 for_window [class=".*"] border pixel 3
 
 # Gaps (Pop!_OS-like spacing)
-gaps inner 8
+gaps inner 4
 gaps outer 2
 smart_gaps on
 
@@ -47,6 +47,9 @@ bindsym $mod+bar exec --no-startup-id rofi -show window -show-icons
 # Lock screen
 bindsym $mod+Escape exec --no-startup-id sh ~/.config/i3/scripts/lock.sh
 
+# Power menu (shutdown, reboot, suspend, logout)
+bindsym $mod+Shift+Escape exec --no-startup-id bash ~/.config/i3/scripts/power_menu.sh
+
 # Screenshot
 bindsym $mod+Shift+s exec --no-startup-id flameshot gui
 bindsym Print exec --no-startup-id flameshot gui
@@ -55,7 +58,7 @@ bindsym Print exec --no-startup-id flameshot gui
 bindsym $mod+f exec nemo
 
 # Browser
-bindsym $mod+b exec flatpak app.zen_browser.zen
+bindsym $mod+b exec --no-startup-id flatpak run app.zen_browser.zen
 
 # Monitor layout (rofi menu)
 bindsym $mod+p exec --no-startup-id bash ~/.config/i3/scripts/monitor_setup.sh
@@ -118,7 +121,7 @@ bindsym $mod+Shift+Right move right
 # ==============================================================================
 
 # Split orientation
-bindsym $mod+b split h
+bindsym $mod+semicolon split h
 bindsym $mod+v split v
 
 # Fullscreen
