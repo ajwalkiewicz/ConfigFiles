@@ -1,4 +1,5 @@
 #!/bin/bash
+# DEPRECATED
 
 OUTPUT="temp.txt"
 LOGS="logs.txt"
@@ -103,7 +104,7 @@ prigrams[13]=install_flatpak
 
 install_tilix(){
     sudo apt install tilix -y
-    git clone https://github.com/MichaelThessel/tilix-gruvbox.git ~/Git/tilix-gruvbox 
+    git clone https://github.com/MichaelThessel/tilix-gruvbox.git ~/Git/tilix-gruvbox
     sudo cp ~/Git/tilix-gruvbox/gruvbox-* /usr/share/tilix/schemes
     rm -rf ~/Git/tilix-gruvbox
 }
@@ -209,7 +210,7 @@ install_fuzzy_finder(){
 programs[32]=install_fuzzy_finder
 
 install_doas(){
-    apt install build-essential make bison flex libpam0g-dev -y 
+    apt install build-essential make bison flex libpam0g-dev -y
     git clone https://github.com/slicer69/doas.git ~/Git/doas
     cd ~/Git/doas
     make install
@@ -240,7 +241,7 @@ install_vim(){
     git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
     # To do:
-    # Tag bar config - require 
+    # Tag bar config - require
     sudo apt install \
     gcc make \
     pkg-config autoconf automake \
@@ -345,13 +346,13 @@ if [ "$BUTTON" == 0 ]; then
 
     echo "Installing packages"
     sleep 2
-    len=$(echo $choices | wc -w) 
+    len=$(echo $choices | wc -w)
     step=$(( 100 / $len ))
     progress=$step
     for choice in $choices; do
         echo "Installing: ${programs[$choice]}" &>> $LOGS
         ${programs[$choice]} &>> $LOGS
-        ( 
+        (
             echo $progress
         ) | dialog --title "Installing Packages" --gauge "Please wait..." 10 60 0
         progress=$(( $progress + $step ))

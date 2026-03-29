@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Lock Screen
+Comment=Lock the screen
+Exec=sh -c "$HOME/.config/i3/scripts/lock.sh"
+Icon=system-lock-screen
+Terminal=false
+Type=Application
+Categories=System;
+Keywords=lock;screen;

@@ -1,0 +1,91 @@
+# Dunst notification daemon configuration
+# For Debian 13 + i3 — Pop!_OS inspired styling
+# See: man dunst, dunst(5)
+
+[global]
+    # Display
+    monitor = 0
+    follow = mouse
+
+    # Geometry
+    width = 350
+    height = 150
+    origin = top-right
+    offset = 12x12
+    notification_limit = 5
+
+    # Progress bar
+    progress_bar = true
+    progress_bar_height = 10
+    progress_bar_frame_width = 1
+
+    # Appearance
+    transparency = 0
+    separator_height = 2
+    padding = 12
+    horizontal_padding = 12
+    text_icon_padding = 12
+    frame_width = 2
+    frame_color = "#FBB86C"
+    separator_color = frame
+    corner_radius = 4
+    gap_size = 4
+
+    # Sort by urgency
+    sort = urgency_descending
+
+    # Font
+    font = MesloLGS NF 10
+
+    # Text
+    line_height = 0
+    markup = full
+    format = "<b>%s</b>\n%b"
+    alignment = left
+    vertical_alignment = center
+    show_age_threshold = 60
+    ellipsize = middle
+    ignore_newline = no
+    stack_duplicates = true
+    hide_duplicate_count = false
+    show_indicators = yes
+
+    # Icons
+    enable_recursive_icon_lookup = true
+    icon_theme = "Pop, Adwaita"
+    icon_position = left
+    min_icon_size = 32
+    max_icon_size = 64
+
+    # History
+    sticky_history = yes
+    history_length = 20
+
+    # Misc
+    browser = /usr/bin/xdg-open
+    always_run_script = true
+    title = Dunst
+    class = Dunst
+
+    # Mouse actions
+    mouse_left_click = close_current
+    mouse_middle_click = do_action, close_current
+    mouse_right_click = close_all
+
+[urgency_low]
+    background = "#F5F5F5"
+    foreground = "#333333"
+    frame_color = "#CCCCCC"
+    timeout = 4
+
+[urgency_normal]
+    background = "#F5F5F5"
+    foreground = "#333333"
+    frame_color = "#FBB86C"
+    timeout = 6
+
+[urgency_critical]
+    background = "#d75f5f"
+    foreground = "#FFFFFF"
+    frame_color = "#900000"
+    timeout = 0
